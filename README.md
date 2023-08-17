@@ -1,7 +1,5 @@
 # Flash⚡Chow - Fast Food Ordering App
 
-![Flash⚡Chow Logo](logo.png)
-
 Flash⚡Chow is a cutting-edge food ordering application that allows you to satisfy your cravings by seamlessly ordering your favorite dishes from a variety of restaurants, all at lightning speed. Built with Next.js 13, Supabase for authentication and database management, and Tailwind CSS for sleek styling, Flash⚡Chow offers a user-friendly experience for both customers and restaurant owners.
 
 ## Table of Contents
@@ -25,8 +23,51 @@ Flash⚡Chow is a cutting-edge food ordering application that allows you to sati
 
 To set up Flash⚡Chow locally, follow these steps:
 
-1. **Clone the repository:**
+1. **Clone the repomsitory:**
 
    ```bash
-   git clone https://github.com/your-username/flashchow.git
-   cd flashchow
+   git clone https://github.com/Lekanjoy/Flash-Chow.git
+   cd Flash-Chow
+   
+2. **Install dependencies:**
+   ```bash
+   npm install
+   
+3. **Create a .env.local file in the root directory and add your Supabase credentials:**
+   ```plaintext
+   NEXT_PUBLIC_SUPABASE_URL=https://your-supabase-url.com
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anonymous-key
+4. **Run the development server:**
+   ```bash
+   npm run dev
+5. **Open your browser and navigate to http://localhost:3000 to access Flash⚡Chow.**
+
+## Usage
+1. Visit the Flash⚡Chow app.
+2. Sign up or log in to your account.
+3. Browse restaurants and their menus.
+4. Select your desired dishes and add them to your cart.
+5. Review your cart and proceed to checkout.
+6. Track the status of your order in real-time.
+7. Enjoy your delicious meal delivered in a flash!
+
+## Technologies
+Flash⚡Chow leverages the following technologies:
+
+1. **Next.js 13**: A modern React framework for building efficient and SEO-friendly web applications.
+2. **Supabase**: An open-source Firebase alternative that offers authentication, database, and storage services.
+3. **Tailwind CSS**: A utility-first CSS framework for quickly designing responsive and stylish user interfaces.
+
+## Contributing
+We welcome contributions from the community! If you'd like to contribute to Flash⚡Chow, please follow these steps:
+
+1. Fork the repository.
+2. Create a new branch for your feature/bugfix.
+3. Make your changes and ensure they are well-tested.
+4. Commit your changes and push them to your fork.
+5. Open a pull request, describing your changes in detail.
+
+## License
+This project is licensed under the **MIT License.**
+
+Feel free to explore, experiment, and enhance Flash⚡Chow! If you encounter any issues or have suggestions, please open an issue. Happy ordering! 🍔🍕🍣
