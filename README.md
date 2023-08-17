@@ -68,6 +68,6 @@ We welcome contributions from the community! If you'd like to contribute to Flas
 5. Open a pull request, describing your changes in detail.
 
 ## License
-This project is licensed under the **MIT License.**
+This project is licensed under the [MIT License](LICENSE).
 
 Feel free to explore, experiment, and enhance Flash⚡Chow! If you encounter any issues or have suggestions, please open an issue. Happy ordering! 🍔🍕🍣
