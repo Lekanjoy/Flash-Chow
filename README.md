@@ -1,34 +1,32 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Flash⚡Chow - Fast Food Ordering App
 
-## Getting Started
+![Flash⚡Chow Logo](logo.png)
 
-First, run the development server:
+Flash⚡Chow is a cutting-edge food ordering application that allows you to satisfy your cravings by seamlessly ordering your favorite dishes from a variety of restaurants, all at lightning speed. Built with Next.js 13, Supabase for authentication and database management, and Tailwind CSS for sleek styling, Flash⚡Chow offers a user-friendly experience for both customers and restaurant owners.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+## Table of Contents
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Technologies](#technologies)
+- [Contributing](#contributing)
+- [License](#license)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Features
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- **Quick and Easy Ordering**: Browse through an extensive list of restaurants, select your desired dishes, and place your order in a matter of seconds.
+- **User Authentication**: Securely sign up, log in, and manage your personal account.
+- **Restaurant Dashboard**: Restaurant owners can manage menu items, track orders, and update their restaurant information via a dedicated dashboard.
+- **Real-time Order Tracking**: Stay informed about your order's status with real-time updates from the kitchen to your doorstep.
+- **Responsive Design**: Enjoy a seamless ordering experience on a variety of devices, thanks to Flash⚡Chow's responsive design.
 
-## Learn More
+## Installation
 
-To learn more about Next.js, take a look at the following resources:
+To set up Flash⚡Chow locally, follow these steps:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. **Clone the repository:**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+   ```bash
+   git clone https://github.com/your-username/flashchow.git
+   cd flashchow
