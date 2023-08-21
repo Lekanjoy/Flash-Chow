@@ -1,17 +1,21 @@
 "use client";
 import React from "react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 import Image from "next/image";
 import Link from "next/link";
 import facebook from "@/public/assets/facebook.svg";
 import google from "@/public/assets/google.svg";
-import { useState } from "react";
 import { supabase } from "@/supabase";
 
 const SignUp = () => {
+  const router = useRouter();
   // Signup
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   // Send user to database
   const sendUserToDatabase = async () => {
@@ -19,32 +23,38 @@ const SignUp = () => {
       .from("Users")
       .insert([{ email: email, full_name: name }]);
     if (error) {
+      toast.error(error.message);
       console.log(error);
       return;
     }
     if (data) {
-      alert("User created successfully"); // More user-friendly notif
+      toast.success("User Profile Created");
     }
   };
 
   // Handle Signup
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
     try {
       let { data, error } = await supabase.auth.signUp({
-        email: email,
-        password: password,
+         email,
+        password,
       });
       sendUserToDatabase(); 
 
       if (error) {
-        alert(error.message);
+        setLoading(false);
+        toast.error(error.message);
         return;
       }
       if (data) {
-        alert("Check your email for confirmation"); // More user-friendly notif
+        setLoading(false);
+       toast.success("Account Created");
+        router.push("/login");
       }
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   };
@@ -54,7 +64,7 @@ const SignUp = () => {
       <h3 className="text-3xl mb-5 text-[#010F07]">Create Account</h3>
       <p className="text-sm w-[300px]">
         Enter your Name, Email and Password for sign up.{" "}
-        <Link href="/signin" className="text-primColor">
+        <Link href="/login" className="text-primColor">
           Already have account?
         </Link>
       </p>
@@ -98,7 +108,10 @@ const SignUp = () => {
             className="border border-primColor text-[#010F07] outline-none p-2 rounded"
           />
         </div>
-        <button className="text-white text-center bg-primColor rounded-md w-full py-4 text-sm">
+        <button
+          
+         className={`text-white text-center bg-primColor rounded-md w-full py-4 text-sm
+        ${loading ? "bg-opacity-50 cursor-not-allowed" : ""}`}>
           SIGN UP
         </button>
       </form>

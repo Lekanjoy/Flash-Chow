@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { walkthroughs as walkthroughData } from "@/utils/walkthrough";
 import Image from "next/image";
 import Link from 'next/link'; 
-import logo from "@/public/assets/flashChowLogo.svg";
 import circleBg from "@/public/assets/circle-Bg.svg";
 
 const Welcome = () => {
@@ -26,13 +25,6 @@ const Welcome = () => {
 
   return (
     <section className=" w-full  bg-white">
-      <div className="flex items-center justify-between">
-        <Image src={logo} alt="FlashChow Logo" />
-        <h1 className="text-2xl font-semibold italic">
-          Flash⚡<span className="text-primColor">Chow</span>
-        </h1>
-      </div>
-
       {walkthroughs[0].img ? (
         <div className="absolute left-0 top-0">
           <Image src={circleBg} alt="" />

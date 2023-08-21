@@ -4,7 +4,7 @@ import Welcome from '../components/welcome'
 export default function Home() {
  
   return (
-    <main className="font-[Poppins] min-h-screen gap-12 p-4">
+    <main className="relative font-[Poppins] px-4 ">
       <Welcome />
 
      

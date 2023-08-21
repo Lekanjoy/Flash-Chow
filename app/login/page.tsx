@@ -1,11 +1,45 @@
+"use client";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import { supabase } from "@/supabase";
 import Image from "next/image";
 import Link from "next/link";
 import facebook from "@/public/assets/facebook.svg";
 import google from "@/public/assets/google.svg";
 
 const LoginPage = () => {
+  const router = useRouter();
+
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      let { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      if (error) {
+        setLoading(false);
+        toast.error(error.message);
+        return;
+      }
+      if (data) {
+        setLoading(false);
+        toast.success("Logged In");
+        router.push("/"); // Redirect to home page
+      }
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
+  };
   return (
-    <section className="w-full p-4 bg-white text-secColor">
+    <section onSubmit={handleLogin} className="w-full p-4 bg-white text-secColor">
       <h3 className="text-3xl mb-5 text-[#010F07]">Welcome back</h3>
       <p className="text-sm w-[300px]">
         Enter your Phone number or Email address for sign in. Enjoy your food
@@ -14,11 +48,13 @@ const LoginPage = () => {
       <form className="flex flex-col gap-y-4 mt-6">
         <div className="flex flex-col gap-y-2">
           <label htmlFor="email" className="font-light text-xs">
-            EMAIL ADDRESS
+            EMAIL ADDRESS  
           </label>
           <input
             type="email"
             id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="border border-primColor text-[#010F07] outline-none p-2 rounded"
           />
         </div>
@@ -30,16 +66,22 @@ const LoginPage = () => {
           <input
             type="password"
             id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             className="border border-primColor text-[#010F07] outline-none p-2 rounded"
           />
         </div>
         <Link
-          href="/recover"
+          href="/recover-password"
           className="text-[#010F07] text-xs font-light text-right"
         >
           Forgot Password?
         </Link>
-        <button className="text-white text-center bg-primColor rounded-md w-full py-4 text-sm">
+        <button
+          className={`text-white text-center bg-primColor rounded-md w-full py-4 text-sm
+        ${loading ? "bg-opacity-50 cursor-not-allowed" : ""}
+        `}
+        >
           SIGN IN
         </button>
       </form>
