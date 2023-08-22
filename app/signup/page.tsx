@@ -50,7 +50,7 @@ const SignUp = () => {
       }
       if (data) {
         setLoading(false);
-       toast.success("Account Created");
+       toast.success("Check your email for confirmation");
         router.push("/login");
       }
     } catch (error) {

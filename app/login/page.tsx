@@ -31,7 +31,7 @@ const LoginPage = () => {
       if (data) {
         setLoading(false);
         toast.success("Logged In");
-        router.push("/"); // Redirect to home page
+        router.push("/");
       }
     } catch (error) {
       setLoading(false);
@@ -39,7 +39,10 @@ const LoginPage = () => {
     }
   };
   return (
-    <section onSubmit={handleLogin} className="w-full p-4 bg-white text-secColor">
+    <section
+      onSubmit={handleLogin}
+      className="w-full p-4 bg-white text-secColor"
+    >
       <h3 className="text-3xl mb-5 text-[#010F07]">Welcome back</h3>
       <p className="text-sm w-[300px]">
         Enter your Phone number or Email address for sign in. Enjoy your food
@@ -48,7 +51,7 @@ const LoginPage = () => {
       <form className="flex flex-col gap-y-4 mt-6">
         <div className="flex flex-col gap-y-2">
           <label htmlFor="email" className="font-light text-xs">
-            EMAIL ADDRESS  
+            EMAIL ADDRESS
           </label>
           <input
             type="email"

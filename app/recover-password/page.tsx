@@ -8,14 +8,14 @@ import doodle from "@/public/assets/doodles.svg";
 const RecoverPassword = () => {
   const [isResetSent, setIsResetSent] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");
-  const [timeRemaining, setTimeRemaining] = useState(1 * 60); // 3 minutes in seconds
-  const [isRunning, setIsRunning] = useState(false);
+  const initialTime: number = 120; // 2 minutes in seconds
+  const [timeRemaining, setTimeRemaining] = useState<number>(initialTime);
+  const [isRunning, setIsRunning] = useState<boolean>(false);
+
+  let timer: NodeJS.Timeout;
 
   useEffect(() => {
-    let timer: NodeJS.Timeout;
-
     if (isRunning && timeRemaining > 0) {
-      setIsRunning(true);
       timer = setInterval(() => {
         setTimeRemaining((prevTime) => prevTime - 1);
       }, 1000);
@@ -25,26 +25,27 @@ const RecoverPassword = () => {
     }
 
     return () => {
-      setIsRunning(false);
       clearInterval(timer);
     };
   }, [isRunning, timeRemaining]);
 
+  // Format time
   const minutes = Math.floor(timeRemaining / 60);
   const seconds = timeRemaining % 60;
-  const timeFormat = `${minutes.toString().padStart(2, "0")}: ${seconds
+  const timeFormat = `${minutes.toString().padStart(2, "0")}:${seconds
     .toString()
     .padStart(2, "0")}`;
 
   // Start countdown
   const startCountdown = () => {
     setIsRunning(true);
+    setTimeRemaining(initialTime); // Reset timeRemaining to initial value
   };
 
   const handlePasswordReset = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    //  Check if email is empty
-    if (!email) return toast.error("Email is required");
+    //  Check if email is empty or contains empty spaces
+    if (!email || email.trim() !== '') return toast.error("Email is required");
 
     try {
       let { data, error } = await supabase.auth.resetPasswordForEmail(email);
@@ -57,9 +58,9 @@ const RecoverPassword = () => {
         return;
       }
       if (data) {
-        setIsResetSent(true);
         startCountdown();
         toast.success("Please check your email");
+        setIsResetSent(true);
       }
     } catch (error) {
       console.error(error);
