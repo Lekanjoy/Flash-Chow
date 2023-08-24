@@ -18,7 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="mt-[54px]">{children}</body>
+      <body className="pt-[54px]">{children}</body>
       <Header />
       <ToastContainer />
     </html>

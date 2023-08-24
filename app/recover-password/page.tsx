@@ -30,22 +30,22 @@ const RecoverPassword = () => {
   }, [isRunning, timeRemaining]);
 
   // Format time
-  const minutes = Math.floor(timeRemaining / 60);
-  const seconds = timeRemaining % 60;
-  const timeFormat = `${minutes.toString().padStart(2, "0")}:${seconds
-    .toString()
-    .padStart(2, "0")}`;
+   const minutes: number = Math.floor(timeRemaining / 60);
+   const seconds: number = timeRemaining % 60;
+   const timeFormat: string = `${minutes.toString().padStart(2, "0")}:${seconds
+     .toString()
+     .padStart(2, "0")}`;
 
-  // Start countdown
-  const startCountdown = () => {
-    setIsRunning(true);
-    setTimeRemaining(initialTime); // Reset timeRemaining to initial value
-  };
+   // Start countdown
+   const startCountdown = (): void => {
+     setIsRunning(true);
+     setTimeRemaining(initialTime); // Reset timeRemaining to initial value
+   };
 
   const handlePasswordReset = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     //  Check if email is empty or contains empty spaces
-    if (!email || email.trim() !== '') return toast.error("Email is required");
+    if (!email) return toast.error("Email is required");
 
     try {
       let { data, error } = await supabase.auth.resetPasswordForEmail(email);

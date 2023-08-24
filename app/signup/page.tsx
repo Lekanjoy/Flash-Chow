@@ -18,13 +18,13 @@ const SignUp = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   // Send user to database
-  const sendUserToDatabase = async () => {
+  const sendUserToDatabase: () => void = async () => {
     const { data, error } = await supabase
       .from("Users")
       .insert([{ email: email, full_name: name }]);
     if (error) {
       toast.error(error.message);
-      console.log(error);
+      console.log(error); 
       return;
     }
     if (data) {
@@ -35,6 +35,12 @@ const SignUp = () => {
   // Handle Signup
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if(!name || !email || !password){
+      toast.warn('Please fill all fields');
+      return;
+    }
+
     setLoading(true);
     try {
       let { data, error } = await supabase.auth.signUp({
@@ -129,9 +135,9 @@ const SignUp = () => {
           </p>
         </div>
         <div className="flex items-center w-full bg-[#4285F4] rounded-md py-2 px-4 gap-x-[30px] text-xs ">
-          <Image src={google} alt="facebook logo" />
+          <Image src={google} alt="google logo" />
           <p className="text-white font-medium uppercase">
-            Connect with Facebook
+            Connect with Google
           </p>
         </div>
       </div>

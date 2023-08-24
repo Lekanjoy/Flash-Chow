@@ -17,6 +17,8 @@ const LoginPage = () => {
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if(!email || !password) return toast.warn("Please fill all the fields" );
+
     setLoading(true);
     try {
       let { data, error } = await supabase.auth.signInWithPassword({
@@ -105,9 +107,9 @@ const LoginPage = () => {
           </p>
         </div>
         <div className="flex items-center w-full bg-[#4285F4] rounded-md py-2 px-4 gap-x-[30px] text-xs ">
-          <Image src={google} alt="facebook logo" />
+          <Image src={google} alt="google logo" />
           <p className="text-white font-medium uppercase">
-            Connect with Facebook
+            Connect with google
           </p>
         </div>
       </div>

@@ -3,13 +3,12 @@ import { useState, useEffect } from "react";
 import { walkthroughs as walkthroughData } from "@/utils/walkthrough";
 import Image from "next/image";
 import Link from 'next/link'; 
-import circleBg from "@/public/assets/circle-Bg.svg";
 
 const Welcome = () => {
   const [walkthroughs] = useState(walkthroughData);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Handle Previous Walkthroughs Click
+  // Handle Next Walkthroughs 
   const handleNextWalkthrough = () => { 
     setCurrentIndex((prevState) =>
       prevState < walkthroughs.length - 1 ? prevState + 1 : (prevState = 0)
@@ -24,17 +23,11 @@ const Welcome = () => {
   }, []);
 
   return (
-    <section className=" w-full  bg-white">
-      {walkthroughs[0].img ? (
-        <div className="absolute left-0 top-0">
-          <Image src={circleBg} alt="" />
-        </div>
-      ) : null}
-
-      <div className="flex justify-center items-center w-full my-4">
+    <section className="w-full custom-height bg-white h-screen ">
+      <div className="flex justify-center items-center w-full my-8">
         <Image
           src={walkthroughs[currentIndex].img}
-          alt="Welcome page Illustration"
+          alt="Illustration"
           width={214}
           height={244}
         />
@@ -51,7 +44,7 @@ const Welcome = () => {
           {walkthroughs.map((_, index) => {
             return (
               <div
-                onClick={() => setCurrentIndex(index)} 
+                onClick={() => setCurrentIndex(index)}
                 key={index}
                 className={`w-[10px] h-[5px] rounded-[41px] cursor-pointer ${
                   currentIndex === index ? "bg-[#22A45D]" : " bg-[#868686]"
@@ -61,9 +54,14 @@ const Welcome = () => {
           })}
         </div>
 
-        <Link href="/login" className="text-white text-center bg-primColor w-full py-4 text-sm">
-          GET STARTED
-        </Link> 
+        <div className="w-full fixed bottom-0 flex px-4 pb-4">
+          <Link
+            href="/login"
+            className="  text-white text-center bg-primColor w-full py-4 text-sm"
+          >
+            GET STARTED
+          </Link>
+        </div>
       </div>
     </section>
   );
