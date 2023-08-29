@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+*{
+  -webkit-tap-highlight-color: transparent;
+  scroll-behavior: smooth;
+}
+
 .custom-height {
     height: calc(100vh - 54px);
   }
+
+ 

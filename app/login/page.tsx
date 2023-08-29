@@ -39,7 +39,7 @@ const LoginPage = () => {
       setLoading(false);
       console.log(error);
     }
-  };
+  }; 
   return (
     <section
       onSubmit={handleLogin}
