@@ -33,7 +33,7 @@ const LoginPage = () => {
       if (data) {
         setLoading(false);
         toast.success("Logged In");
-        router.push("/");
+        router.push("/choose-location");
       }
     } catch (error) {
       setLoading(false);
