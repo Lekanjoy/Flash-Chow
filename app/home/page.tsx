@@ -1,9 +1,10 @@
+import {useState} from 'react'
+
 
 const HomePage = () => {
 
     return (
-
-    <div>Home</div>
+    <section className="w-full p-4">Home</section>
 
     )
 }
