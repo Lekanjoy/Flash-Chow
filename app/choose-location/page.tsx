@@ -6,22 +6,25 @@ import locationGray from "@/public/assets/location-gray.svg";
 import marker from "@/public/assets/marker.svg";
 import close from "@/public/assets/close.svg";
 import Link from "next/link";
-import {useSelector} from 'react-redux'
+import { useSelector, useDispatch } from "react-redux";
+import {
+  clearLocation,
+  updateLocation,
+} from "@/features/location/locationSlice";
+import { suggestionProps } from "@/utils/types";
+
 const ChooseLocation = () => {
-  const [currentLocation, setCurrentLocation] = useState("");
+  const dispatch = useDispatch();
+  const locStore = useSelector((store) => store.location);
   const [suggestions, setSuggestions] = useState([]);
   const [LAT, setLAT] = useState(0);
   const [LONG, setLONG] = useState(0);
   const apiKey = process.env.NEXT_PUBLIC_RADAR_MAPS_API_KEY;
 
   const autoCompleteUrl = `https://api.radar.io/v1/search/autocomplete?query=${encodeURIComponent(
-    currentLocation
+    locStore
   )}&near=`;
   const reverseGeoCode = `https://api.radar.io/v1/geocode/reverse?coordinates=${LAT},${LONG}`;
-
-  // const locStore = useSelector(store => store.location) 
-  // console.log(locStore); 
-  
 
   function useCurrentLocation() {
     getCurrentLocation();
@@ -39,8 +42,8 @@ const ChooseLocation = () => {
         return response.json();
       })
       .then((data) => {
-        const suggestions = data.addresses[0].formattedAddress;
-        setCurrentLocation(suggestions);
+        const locationData = data.addresses[0].formattedAddress;
+        dispatch(updateLocation(locationData));
       })
       .catch((error) => {
         console.error("Fetch error:", error);
@@ -59,16 +62,14 @@ const ChooseLocation = () => {
         const longitude = position.coords.longitude;
         setLAT(latitude);
         setLONG(longitude);
-        console.log(LAT, LONG);
       });
     } else {
       console.log("Geolocation is not available or not allowed by the user.");
     }
   }
 
-  function searchLocation(value: string) {
-    setCurrentLocation(value);
-    console.log(currentLocation);
+  function searchLocation(e) {
+    dispatch(updateLocation(e.target.value));
 
     fetch(autoCompleteUrl, {
       method: "GET",
@@ -85,18 +86,11 @@ const ChooseLocation = () => {
       .then((data) => {
         setSuggestions(data);
         console.log(data.addresses);
-        
       })
       .catch((error) => {
         console.error("Fetch error:", error);
       });
   }
-interface suggestionProps {
-  formattedAddress: string,
-  county: string,
-  country: string
-
-}
 
   return (
     <form className="w-full p-4 bg-white text-secColor">
@@ -109,10 +103,10 @@ interface suggestionProps {
           restaurants near you.
         </p>
       </div>
-      {currentLocation.length < 1 && (
+      {locStore.length < 1 && (
         <div
           onClick={useCurrentLocation}
-          className="w-full cursor-pointer text-primColor border border-primColor flex items-center justify-center gap-x-2 rounded-md py-4 mb-5 hover:bg-primColor hover:text-white hover:border-none"
+          className="w-full cursor-pointer  text-primColor border border-primColor flex items-center justify-center gap-x-2 rounded-md py-4 mb-5 hover:bg-primColor hover:text-white hover:border-none"
         >
           <Image src={location} alt="location icon" />
           <p>Use current location</p>
@@ -123,22 +117,21 @@ interface suggestionProps {
           type="text"
           placeholder="Enter a new address"
           className="border w-full py-4 pl-12 rounded-md"
-          value={currentLocation}
-          onChange={(e) => searchLocation(e.target.value)}
+          value={locStore}
+          onChange={searchLocation}
         />
         <Image
           src={marker}
           alt="location icon"
           className="absolute left-3 top-4"
         />
-        {currentLocation.length > 0 && (
+        {locStore.length > 0 && (
           <Image
             src={close}
             alt="close icon"
             className="absolute right-4 top-6 bg-[#D8D8D8] w-4 h-4 rounded-full cursor-pointer"
             onClick={() => {
-              setSuggestions([]);
-              setCurrentLocation("");
+              dispatch(clearLocation());
             }}
           />
         )}
