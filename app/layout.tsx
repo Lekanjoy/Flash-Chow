@@ -1,6 +1,6 @@
 "use client";
 import "./globals.css";
-import type { Metadata } from "next";
+// import type { Metadata } from "next";
 import { usePathname } from "next/navigation";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -8,11 +8,11 @@ import NextTopLoader from "nextjs-toploader";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 
-export const metadata: Metadata = {
-  title: "FLASH⚡CHOW",
-  description:
-    "Order your favorite food and cravings from your favorite restaurants and get it in a flash.",
-};
+// export const metadata: Metadata = {
+//   title: "FLASH⚡CHOW",
+//   description:
+//     "Order your favorite food and cravings from your favorite restaurants and get it in a flash.",
+// };
 
 export default function RootLayout({
   children,
