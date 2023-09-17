@@ -2,19 +2,26 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import location from "@/public/assets/location.svg";
+import locationGray from "@/public/assets/location-gray.svg";
 import marker from "@/public/assets/marker.svg";
+import close from "@/public/assets/close.svg";
 import Link from "next/link";
-
+import {useSelector} from 'react-redux'
 const ChooseLocation = () => {
   const [currentLocation, setCurrentLocation] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
   const [LAT, setLAT] = useState(0);
   const [LONG, setLONG] = useState(0);
   const apiKey = process.env.NEXT_PUBLIC_RADAR_MAPS_API_KEY;
-  const query = "Amule";
 
-  // const apiUrl = `https://api.radar.io/v1/search/autocomplete?query=${encodeURIComponent(query)}&near=${latitude},${longitude}`;
-
+  const autoCompleteUrl = `https://api.radar.io/v1/search/autocomplete?query=${encodeURIComponent(
+    currentLocation
+  )}&near=`;
   const reverseGeoCode = `https://api.radar.io/v1/geocode/reverse?coordinates=${LAT},${LONG}`;
+
+  // const locStore = useSelector(store => store.location) 
+  // console.log(locStore); 
+  
 
   function useCurrentLocation() {
     getCurrentLocation();
@@ -33,7 +40,6 @@ const ChooseLocation = () => {
       })
       .then((data) => {
         const suggestions = data.addresses[0].formattedAddress;
-        console.log(data);
         setCurrentLocation(suggestions);
       })
       .catch((error) => {
@@ -41,26 +47,56 @@ const ChooseLocation = () => {
       });
   }
 
- useEffect(() => {
-  getCurrentLocation(); 
- }, [LAT, LONG]);
-  
+  useEffect(() => {
+    getCurrentLocation();
+  }, [LAT, LONG]);
+
   // Get user's cordinates
   function getCurrentLocation() {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(function (position) {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
-
         setLAT(latitude);
         setLONG(longitude);
         console.log(LAT, LONG);
       });
-
     } else {
       console.log("Geolocation is not available or not allowed by the user.");
     }
   }
+
+  function searchLocation(value: string) {
+    setCurrentLocation(value);
+    console.log(currentLocation);
+
+    fetch(autoCompleteUrl, {
+      method: "GET",
+      headers: {
+        Authorization: `${apiKey}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setSuggestions(data);
+        console.log(data.addresses);
+        
+      })
+      .catch((error) => {
+        console.error("Fetch error:", error);
+      });
+  }
+interface suggestionProps {
+  formattedAddress: string,
+  county: string,
+  country: string
+
+}
 
   return (
     <form className="w-full p-4 bg-white text-secColor">
@@ -73,33 +109,63 @@ const ChooseLocation = () => {
           restaurants near you.
         </p>
       </div>
-      <div
-        onClick={useCurrentLocation}
-        className="w-full cursor-pointer text-primColor border border-primColor flex items-center justify-center gap-x-2 rounded-md py-4 mb-5 hover:bg-primColor hover:text-white hover:border-none"
-      >
-        <Image src={location} alt="location icon" />
-        <p>Use current location</p>
-      </div>
+      {currentLocation.length < 1 && (
+        <div
+          onClick={useCurrentLocation}
+          className="w-full cursor-pointer text-primColor border border-primColor flex items-center justify-center gap-x-2 rounded-md py-4 mb-5 hover:bg-primColor hover:text-white hover:border-none"
+        >
+          <Image src={location} alt="location icon" />
+          <p>Use current location</p>
+        </div>
+      )}
       <div className="relative max-w-full">
         <input
           type="text"
           placeholder="Enter a new address"
           className="border w-full py-4 pl-12 rounded-md"
           value={currentLocation}
-          onChange={(e) => setCurrentLocation(e.target.value)}
+          onChange={(e) => searchLocation(e.target.value)}
         />
         <Image
           src={marker}
           alt="location icon"
           className="absolute left-3 top-4"
         />
+        {currentLocation.length > 0 && (
+          <Image
+            src={close}
+            alt="close icon"
+            className="absolute right-4 top-6 bg-[#D8D8D8] w-4 h-4 rounded-full cursor-pointer"
+            onClick={() => {
+              setSuggestions([]);
+              setCurrentLocation("");
+            }}
+          />
+        )}
+        <div className="mt-4 w-full bg-white flex flex-col">
+          {suggestions.addresses?.map((suggestion: suggestionProps) => {
+            return (
+              <div className="flex w-full items-center gap-x-3">
+                <Image src={locationGray} alt="location icon" className="" />
+                <div className="w-full flex flex-col pb-[10px] border-b">
+                  <p className="text-[#010F07]">
+                    {suggestion.formattedAddress}
+                  </p>
+                  <p className="text-secColor text-sm">
+                    {suggestion.county}, {suggestion.country}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
-      {currentLocation.length > 0 && (
+      {/* {currentLocation.length > 0 && (
         <button className="text-white text-center mt-3 bg-primColor rounded-md w-full py-4 text-sm">
           Continue
         </button>
-      )}
+      )} */}
     </form>
   );
 };
