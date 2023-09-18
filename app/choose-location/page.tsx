@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import Image from "next/image";
 import location from "@/public/assets/location.svg";
 import locationGray from "@/public/assets/location-gray.svg";
@@ -15,7 +15,7 @@ import { suggestionProps } from "@/utils/types";
 
 const ChooseLocation = () => {
   const dispatch = useDispatch();
-  const locStore = useSelector((store) => store.location);
+  const locStore = useSelector((store:any) => store.location);
   const [suggestions, setSuggestions] = useState([]);
   const [LAT, setLAT] = useState(0);
   const [LONG, setLONG] = useState(0);
@@ -68,7 +68,7 @@ const ChooseLocation = () => {
     }
   }
 
-  function searchLocation(e) {
+  function searchLocation(e: ChangeEvent<HTMLInputElement>) {
     dispatch(updateLocation(e.target.value));
 
     fetch(autoCompleteUrl, {
@@ -84,8 +84,7 @@ const ChooseLocation = () => {
         return response.json();
       })
       .then((data) => {
-        setSuggestions(data);
-        console.log(data.addresses);
+        setSuggestions(data.addresses);
       })
       .catch((error) => {
         console.error("Fetch error:", error);
@@ -131,14 +130,21 @@ const ChooseLocation = () => {
             alt="close icon"
             className="absolute right-4 top-6 bg-[#D8D8D8] w-4 h-4 rounded-full cursor-pointer"
             onClick={() => {
-              dispatch(clearLocation());
+              dispatch(clearLocation())
+              setSuggestions([])
             }}
           />
         )}
-        <div className="mt-4 w-full bg-white flex flex-col">
-          {suggestions.addresses?.map((suggestion: suggestionProps) => {
+        <div className="mt-4 w-full max-h-[150px] overflow-auto bg-white flex flex-col">
+          {suggestions.map((suggestion: suggestionProps, index: number) => {
             return (
-              <div className="flex w-full items-center gap-x-3">
+              <div
+                onClick={() =>
+                  dispatch(updateLocation(suggestion.formattedAddress))
+                }
+                key={index}
+                className="flex w-full h-full items-center gap-x-3"
+              >
                 <Image src={locationGray} alt="location icon" className="" />
                 <div className="w-full flex flex-col pb-[10px] border-b">
                   <p className="text-[#010F07]">
@@ -154,11 +160,13 @@ const ChooseLocation = () => {
         </div>
       </div>
 
-      {/* {currentLocation.length > 0 && (
-        <button className="text-white text-center mt-3 bg-primColor rounded-md w-full py-4 text-sm">
-          Continue
-        </button>
-      )} */}
+      {locStore.length > 0 && (
+        <Link href="/home">
+          <button className="text-white text-center mt-3 bg-primColor rounded-md w-full py-4 text-sm">
+            Continue
+          </button>
+        </Link>
+      )}
     </form>
   );
 };
