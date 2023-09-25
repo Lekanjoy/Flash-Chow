@@ -2,7 +2,6 @@
 import { useState, useEffect, ChangeEvent } from "react";
 import Image from "next/image";
 import location from "@/public/assets/location.svg";
-import locationGray from "@/public/assets/location-gray.svg";
 import marker from "@/public/assets/marker.svg";
 import close from "@/public/assets/close.svg";
 import Link from "next/link";
@@ -12,10 +11,12 @@ import {
   updateLocation,
 } from "@/features/location/locationSlice";
 import { suggestionProps } from "@/utils/types";
+import { toast } from "react-toastify";
+import Suggestion from "@/components/location-suggestions";
 
 const ChooseLocation = () => {
   const dispatch = useDispatch();
-  const locStore = useSelector((store:any) => store.location);
+  const locStore = useSelector((store: any) => store.location);
   const [suggestions, setSuggestions] = useState([]);
   const [LAT, setLAT] = useState(0);
   const [LONG, setLONG] = useState(0);
@@ -47,6 +48,7 @@ const ChooseLocation = () => {
       })
       .catch((error) => {
         console.error("Fetch error:", error);
+        toast.error('Error getting location')
       });
   }
 
@@ -64,7 +66,7 @@ const ChooseLocation = () => {
         setLONG(longitude);
       });
     } else {
-      console.log("Geolocation is not available or not allowed by the user.");
+      toast.warn("Please allow location to use this app ");
     }
   }
 
@@ -88,12 +90,14 @@ const ChooseLocation = () => {
       })
       .catch((error) => {
         console.error("Fetch error:", error);
+        toast.error('Error getting location suggestions')
+
       });
   }
 
   return (
     <form className="w-full p-4 bg-white text-secColor">
-      <div className="w-full  mb-8">
+      <div className="w-full mb-8 text-center">
         <h3 className="text-3xl mb-4 text-[#010F07]">
           Find restaurants near you
         </h3>
@@ -130,32 +134,14 @@ const ChooseLocation = () => {
             alt="close icon"
             className="absolute right-4 top-6 bg-[#D8D8D8] w-4 h-4 rounded-full cursor-pointer"
             onClick={() => {
-              dispatch(clearLocation())
-              setSuggestions([])
+              dispatch(clearLocation());
+              setSuggestions([]);
             }}
           />
         )}
         <div className="mt-4 w-full max-h-[150px] overflow-auto bg-white flex flex-col">
           {suggestions.map((suggestion: suggestionProps, index: number) => {
-            return (
-              <div
-                onClick={() =>
-                  dispatch(updateLocation(suggestion.formattedAddress))
-                }
-                key={index}
-                className="flex w-full h-full items-center gap-x-3"
-              >
-                <Image src={locationGray} alt="location icon" className="" />
-                <div className="w-full flex flex-col pb-[10px] border-b">
-                  <p className="text-[#010F07]">
-                    {suggestion.formattedAddress}
-                  </p>
-                  <p className="text-secColor text-sm">
-                    {suggestion.county}, {suggestion.country}
-                  </p>
-                </div>
-              </div>
-            );
+            return <Suggestion suggestion={suggestion} index={index} />;
           })}
         </div>
       </div>
