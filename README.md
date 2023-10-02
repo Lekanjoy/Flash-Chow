@@ -33,10 +33,11 @@ To set up Flash⚡Chow locally, follow these steps:
    ```bash
    npm install
    
-3. **Create a .env.local file in the root directory and add your Supabase credentials:**
+3. **Create a .env.local file in the root directory and add your Supabase and Rada Maps credentials:**
    ```plaintext
    NEXT_PUBLIC_SUPABASE_URL=https://your-supabase-url.com
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anonymous-key
+   NEXT_PUBLIC_RADAR_MAPS_API_KEY=your-anonymous-key
 4. **Run the development server:**
    ```bash
    npm run dev
